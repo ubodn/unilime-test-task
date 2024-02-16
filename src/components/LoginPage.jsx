@@ -1,13 +1,11 @@
 import { useNavigate } from 'react-router-dom';
 import { useAuthentication } from '../hooks/AuthenticationProvider';
 import { ErrorModal } from './ErrorModal';
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 
 export const LoginPage  = () => {
   const { login, errors, isAuthenticated } = useAuthentication();
   const navigate = useNavigate();
-  const dialog  = useRef();
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     await login(
@@ -24,7 +22,7 @@ export const LoginPage  = () => {
 
   return (
     <>
-      <ErrorModal ref={dialog} />
+      <ErrorModal />
       <form className="form" onSubmit={handleSubmit}>
         <h1>Log in</h1>
         <p>

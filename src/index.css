@@ -83,3 +83,25 @@ button:focus-visible {
 .closeModalButton {
   margin: 2em 0 0 14em;
 }
+
+.products-section {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 1em;
+  margin: 1em 0 1em 3em;
+}
+.products-section section {
+  width: 500px;
+}
+.products-section img {
+  width: 500px;
+}
+
+.nav-button {
+  width: 20em;
+  margin-right: 1em;
+}
+
+.nav-buttons-section {
+
+}
