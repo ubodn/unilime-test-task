@@ -88,11 +88,9 @@ button:focus-visible {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-gap: 1em;
-  margin: 1em 0 1em 3em;
+  margin: 1em 0 1em 1em;
 }
-.products-section section {
-  width: 500px;
-}
+
 .products-section img {
   width: 500px;
 }
@@ -103,5 +101,6 @@ button:focus-visible {
 }
 
 .nav-buttons-section {
-
+  display: flex;
+  justify-content: center;
 }

@@ -32,8 +32,10 @@ export const ProductsPage = () => {
     setIsLoading(true);
     getProducts(currentPage).then(items => {
       setProducts(items);
-      setPageCount(items.last_page)
+      setPageCount(items.last_page);
     }).catch(e => {
+      console.log('eeeee', e);
+
       if (e.status === 401) {
         console.log('e.status === 401', e);
         localStorage.clear();
@@ -64,24 +66,35 @@ export const ProductsPage = () => {
     await logout();
   };
 
+
+  if (isLoading) {
+    return <div>Loading products...</div>;
+  }
+
+  if (!products?.data.length) {
+    return (
+      <div>
+        <button onClick={handleLogout}>Logout</button>
+        <div>No products found</div>
+      </div>
+    )
+  }
+
   return (
     <>
       <button onClick={handleLogout}>Logout</button>
       <section className="products-section">
-        {isLoading && 'Loading products...'}
-        {!isLoading && (
-          products?.data?.length > 0 ? (
-            products.data.map(product => (
-              <section key={product.id}>
-                <section>
-                  <img src={product.thumbnail} alt={product.title}/>
-                </section>
-                <section>{product.title}</section>
-                <section>{product.price}</section>
+        {
+          products.data.map(product => (
+            <section key={product.id}>
+              <section>
+                <img src={product.thumbnail} alt={product.title}/>
               </section>
-            ))
-          ) : 'No products found'
-        )}
+              <section>{product.title}</section>
+              <section>{product.price}</section>
+            </section>
+          ))
+        }
       </section>
       <section className="nav-buttons-section">
         <button onClick={prevPage} disabled={currentPage === 1} className="nav-button">
