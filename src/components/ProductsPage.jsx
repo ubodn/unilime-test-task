@@ -1,15 +1,15 @@
 import { useAuthentication } from '../hooks/AuthenticationProvider';
 import { useNavigate } from 'react-router-dom';
-import  { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import { Filters } from './Filters';
 
 export const ProductsPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [products, setProducts] = useState({});
   const [pageCount, setPageCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-  const { logout, isAuthenticated } = useAuthentication();
+  const { logout, isAuthenticated, getProducts, localStorageChanged } = useAuthentication();
   const navigate = useNavigate();
-  const token = localStorage.getItem('token');
     
   useEffect(() => {
     if (!isAuthenticated) {
@@ -17,34 +17,15 @@ export const ProductsPage = () => {
     }
   }, [isAuthenticated, navigate]);
 
-  const getProducts = async (page = 0) => {
-    const products = await fetch(`https://dummy-api.d0.acom.cloud/api/products?page=${page}`,{
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${token}`
-      },
-    });
-
-    return products.json();
-  };
-
   useEffect(() => {
     setIsLoading(true);
     getProducts(currentPage).then(items => {
       setProducts(items);
       setPageCount(items.last_page);
-    }).catch(e => {
-      console.log('eeeee', e);
-
-      if (e.status === 401) {
-        console.log('e.status === 401', e);
-        localStorage.clear();
-        navigate('/');
-      }
     }).finally(() => {
       setIsLoading(false);
     });
-  }, [currentPage]);
+  }, [currentPage,localStorageChanged]);
 
   const nextPage = () => {
     if (currentPage < pageCount) {
@@ -58,9 +39,6 @@ export const ProductsPage = () => {
     }
   };
 
-  console.log('isLoading', isLoading);
-  console.log('products', products);
-  console.log('currentPage', currentPage);
   const handleLogout = async (e) => {
     e.preventDefault();
     await logout();
@@ -71,18 +49,20 @@ export const ProductsPage = () => {
     return <div>Loading products...</div>;
   }
 
-  if (!products?.data.length) {
+  if (!products?.data?.length) {
     return (
       <div>
         <button onClick={handleLogout}>Logout</button>
+        <Filters />
         <div>No products found</div>
       </div>
     )
   }
-
+  console.log('PAGES', currentPage, pageCount);
   return (
     <>
       <button onClick={handleLogout}>Logout</button>
+      <Filters />
       <section className="products-section">
         {
           products.data.map(product => (

@@ -7,6 +7,7 @@ export const AuthenticationProvider = (props) => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [errors, setErrors] = useState();
     const [isLoading, setIsLoading] = useState(true);
+    const [localStorageChanged, setLocalStorageChanged] = useState(false);
     const token = localStorage.getItem('token');
     const isLogged  = Boolean(token);
   
@@ -14,6 +15,12 @@ export const AuthenticationProvider = (props) => {
       setIsAuthenticated(isLogged);
       setIsLoading(false);
     }, [isLogged]);
+
+    useEffect(() => {
+      window.addEventListener("storage", () => {
+        setLocalStorageChanged(!localStorageChanged);
+      });
+    });
     
     const clearErrors = (newErrorsState)  => {
       setErrors(newErrorsState);
@@ -69,8 +76,43 @@ export const AuthenticationProvider = (props) => {
           setIsLoading(false);
         }
     };
-    console.log('AuthenticationProvider', isAuthenticated);
-    const data = { login, logout, errors, isAuthenticated, isLoading, clearErrors };
+
+    const getProducts = async (page = 1) => {
+      try {
+        const params = new URLSearchParams();
+        const filters = ['title', 'price_from', 'price_to', 'from', 'to'];
+
+        filters.forEach(filter => {
+          const data = localStorage.getItem(filter);
+          if (data?.length) {
+            params.append(filter, data);
+          }
+        });
+
+        params.append('page', page);
+
+        const products = await fetch(`https://dummy-api.d0.acom.cloud/api/products?${params.toString()}`,{
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`
+          },
+        });
+  
+        if (products.status >= 400 && products.status < 500) {
+          const response = await products.json();
+  
+          throw new Error(response.error);
+        }
+  
+        return products.json();
+      } catch (e) {
+        if (e.message === 'Unauthorized') {
+          localStorage.clear();
+        }
+      }
+    };
+
+    const data = { login, logout, errors, isAuthenticated, isLoading, clearErrors, getProducts, localStorageChanged };
     
     return <AuthContext.Provider value={data}>{props.children}</AuthContext.Provider>;
 };

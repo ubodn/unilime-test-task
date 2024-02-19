@@ -104,3 +104,15 @@ button:focus-visible {
   display: flex;
   justify-content: center;
 }
+
+.filters-section {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 0 3em  0 3em;
+}
+
+.filters-section input {
+  padding: 0.5em;
+  margin-left: 0.5em;
+}
