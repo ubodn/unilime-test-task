@@ -1,9 +1,9 @@
-import { useAuthentication } from '../hooks/AuthenticationProvider';
+import { useAppData } from '../hooks/AppProvider';
 import { useNavigate } from 'react-router-dom';
 import  { useEffect } from 'react';
 
 export const BasePage = () => {
-  const { isAuthenticated, isLoading } = useAuthentication();
+  const { isAuthenticated, isLoading } = useAppData();
   const navigate = useNavigate();
 
   useEffect(() => {

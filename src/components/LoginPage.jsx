@@ -1,10 +1,10 @@
 import { useNavigate } from 'react-router-dom';
-import { useAuthentication } from '../hooks/AuthenticationProvider';
+import { useAppData } from '../hooks/AppProvider';
 import { ErrorModal } from './ErrorModal';
 import { useEffect } from 'react';
 
 export const LoginPage  = () => {
-  const { login, errors, isAuthenticated } = useAuthentication();
+  const { login, errors, isAuthenticated } = useAppData();
   const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();

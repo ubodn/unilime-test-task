@@ -1,9 +1,9 @@
 import { useState, createContext, useContext, useEffect } from 'react';
 
-const AuthContext = createContext();
-export const useAuthentication = () => useContext(AuthContext);
+const AppContext = createContext();
+export const useAppData = () => useContext(AppContext);
 
-export const AuthenticationProvider = (props) => {
+export const AppProvider = (props) => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [errors, setErrors] = useState();
     const [isLoading, setIsLoading] = useState(true);
@@ -114,5 +114,5 @@ export const AuthenticationProvider = (props) => {
 
     const data = { login, logout, errors, isAuthenticated, isLoading, clearErrors, getProducts, localStorageChanged };
     
-    return <AuthContext.Provider value={data}>{props.children}</AuthContext.Provider>;
+    return <AppContext.Provider value={data}>{props.children}</AppContext.Provider>;
 };

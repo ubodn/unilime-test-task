@@ -1,4 +1,4 @@
-import { useAuthentication } from '../hooks/AuthenticationProvider';
+import { useAppData } from '../hooks/AppProvider';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { Filters } from './Filters';
@@ -8,7 +8,7 @@ export const ProductsPage = () => {
   const [products, setProducts] = useState({});
   const [pageCount, setPageCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-  const { logout, isAuthenticated, getProducts, localStorageChanged } = useAuthentication();
+  const { logout, isAuthenticated, getProducts, localStorageChanged } = useAppData();
   const navigate = useNavigate();
     
   useEffect(() => {
@@ -44,6 +44,10 @@ export const ProductsPage = () => {
     await logout();
   };
 
+  const resetPage = () =>  {
+    setCurrentPage(1);
+  };
+
 
   if (isLoading) {
     return <div>Loading products...</div>;
@@ -58,11 +62,11 @@ export const ProductsPage = () => {
       </div>
     )
   }
-  console.log('PAGES', currentPage, pageCount);
+  
   return (
     <>
       <button onClick={handleLogout}>Logout</button>
-      <Filters />
+      <Filters resetPage={resetPage} />
       <section className="products-section">
         {
           products.data.map(product => (

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-export const Filters = () => {
+export const Filters = ({ resetPage }) => {
   const title = localStorage.getItem('title') ?? '';
   const price_from = localStorage.getItem('price_from') ?? '';
   const price_to = localStorage.getItem('price_to') ??  '';
@@ -35,6 +35,7 @@ export const Filters = () => {
 
   const handleSubmit = event => {
     event.preventDefault();
+    resetPage();
 
     if (minPrice !== '' && maxPrice !== '' && parseFloat(minPrice) > parseFloat(maxPrice)) {
         alert("End price cannot be less than start price");

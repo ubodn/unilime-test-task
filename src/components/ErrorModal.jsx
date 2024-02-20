@@ -1,8 +1,8 @@
-import { useAuthentication } from '../hooks/AuthenticationProvider';
+import { useAppData } from '../hooks/AppProvider';
 import { createPortal } from 'react-dom';
 
 export const ErrorModal = () => {
-  const { clearErrors, errors } = useAuthentication();
+  const { clearErrors, errors } = useAppData();
   const onClick = () => {
     clearErrors(undefined);
   };
